@@ -18,7 +18,15 @@ def nprint(string):
         string (str): The text to print to stdout 
     """
 
-    cprint(string, "yellow")
+    cprint(string, "light_blue")
+
+def hprint(string): 
+    """
+    Prints header text in bold light blue 
+    Args: 
+        string (str): The text to print to stdout 
+    """
+    cprint(string, "light_blue", attrs=["bold"])
 
 def sprint(string): 
     """

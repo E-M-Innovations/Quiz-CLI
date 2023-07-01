@@ -3,7 +3,7 @@ import os
 from test_utils import load_test_data, present_question, evaluate_answers
 from main import main
 from test_folder_utils import * 
-from color import eprint, sprint, nprint
+from color import eprint, sprint, nprint, hprint
 '''
  Contains the core functionality for conducting multiple-choice tests.
  It includes functions for getting user input, selecting test files,
@@ -38,7 +38,7 @@ def get_user_choice(test_files):
         questions = test_data.get('questions', [])
         num_questions = len(questions)
         total_questions += num_questions
-        print(f"{index+1}. {test_file_name} ({num_questions} questions)")
+        nprint(f"{index+1}. {test_file_name} ({num_questions} questions)")
     print(f"\nThe total number of questions across all tests: {total_questions}\n")
 
     user_choice = None
@@ -75,9 +75,9 @@ def user_choice_test_folders(test_folders):
         str: Path of the selected test folder.
     """
     clear_screen()
-    print("Available Test Folders:")
+    hprint("Available Test Folders:")
     for index, folder in enumerate(test_folders):
-        print(f"{index+1}. {folder}")
+        nprint(f"{index+1}. {folder}")
 
     user_choice = None
     while not user_choice:

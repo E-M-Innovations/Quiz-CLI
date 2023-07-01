@@ -1,5 +1,5 @@
 import toml
-from color import eprint, nprint
+from color import eprint, nprint, hprint
 '''
  Provides utility functions for working with multiple-choice test data in TOML format.
  It includes functions for loading test data, presenting questions, 
@@ -32,7 +32,7 @@ def present_question(question_num,question, choices):
     Returns:
         int: The user's choice number.
     """
-    nprint("\n" + f"Q{question_num}) {question}")
+    hprint("\n" + f"Q{question_num}) {question}")
     for index, choice in enumerate(choices):
         nprint(f'{index+1}. {choice}')
 
