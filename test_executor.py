@@ -3,6 +3,7 @@ import os
 from test_utils import load_test_data, present_question, evaluate_answers
 from main import main
 from test_folder_utils import * 
+from color import eprint, sprint, nprint, hprint
 '''
  Contains the core functionality for conducting multiple-choice tests.
  It includes functions for getting user input, selecting test files,
@@ -37,7 +38,7 @@ def get_user_choice(test_files):
         questions = test_data.get('questions', [])
         num_questions = len(questions)
         total_questions += num_questions
-        print(f"{index+1}. {test_file_name} ({num_questions} questions)")
+        nprint(f"{index+1}. {test_file_name} ({num_questions} questions)")
     print(f"\nThe total number of questions across all tests: {total_questions}\n")
 
     user_choice = None
@@ -53,13 +54,13 @@ def get_user_choice(test_files):
                 test_numbers = [int(number) for number in test_numbers]
                 invalid_numbers = [number for number in test_numbers if number < 1 or number > len(test_files)]
                 if invalid_numbers:
-                    print("Invalid input. Please enter valid test numbers.")
+                    eprint("Invalid input. Please enter valid test numbers.")
                 elif len(set(test_numbers)) != len(test_numbers):
-                    print("Invalid input. Please do not repeat test numbers.")
+                    eprint("Invalid input. Please do not repeat test numbers.")
                 else:
                     user_choice = [test_files[number - 1] for number in test_numbers]
             except ValueError:
-                print("Invalid input. Please enter valid test numbers or 'all'.")
+                eprint("Invalid input. Please enter valid test numbers or 'all'.")
     return user_choice
 
 
@@ -74,9 +75,9 @@ def user_choice_test_folders(test_folders):
         str: Path of the selected test folder.
     """
     clear_screen()
-    print("Available Test Folders:")
+    hprint("Available Test Folders:")
     for index, folder in enumerate(test_folders):
-        print(f"{index+1}. {folder}")
+        nprint(f"{index+1}. {folder}")
 
     user_choice = None
     while not user_choice:
@@ -84,11 +85,11 @@ def user_choice_test_folders(test_folders):
         try:
             folder_index = int(folder_input)
             if folder_index < 1 or folder_index > len(test_folders):
-                print("Invalid input. Please enter a valid folder number.")
+                eprint("Invalid input. Please enter a valid folder number.")
             else:
                 user_choice = test_folders[folder_index - 1]
         except ValueError:
-            print("Invalid input. Please enter a valid folder number.")
+            eprint("Invalid input. Please enter a valid folder number.")
     return user_choice
 
 def conduct_test(user_choice, test_files):
@@ -111,7 +112,7 @@ def conduct_test(user_choice, test_files):
 
     for test_file in user_choice:
         if test_file not in test_files:
-            print(f"Invalid test file: {test_file}. Skipping this test.")
+            eprint(f"Invalid test file: {test_file}. Skipping this test.")
             continue
 
         test_data = load_test_data(test_file)
@@ -119,14 +120,14 @@ def conduct_test(user_choice, test_files):
         correct_answers = test_data.get('correct_answers', {}).get('correct_answers', [])
 
         if len(questions) != len(correct_answers) or not questions or not correct_answers:
-            print(f"Invalid test file format: {test_file}. Skipping this test.")
+            eprint(f"Invalid test file format: {test_file}. Skipping this test.")
             continue
 
         all_questions.extend(questions)
         all_correct_answers.extend(correct_answers)
 
     if not all_questions or not all_correct_answers:
-        print("No valid questions found. Exiting test.")
+        eprint("No valid questions found. Exiting test.")
         return user_answers, num_correct, total_questions
 
     combined = list(zip(all_questions, all_correct_answers))
@@ -142,10 +143,10 @@ def conduct_test(user_choice, test_files):
         user_answers.append(user_choice)
         last_correct_answers = correct_answers[len(user_answers) - 1]
         if user_choice == last_correct_answers:
-            print("Correct!")
+            sprint("Correct!")
         else:
-            print("Incorrect.")
-            print(f"The Correct Answer was: {question.get('choices', [])[last_correct_answers-1]}")
+            eprint("Incorrect.")
+            eprint(f"The Correct Answer was: {question.get('choices', [])[last_correct_answers-1]}")
 
     num_correct = evaluate_answers(user_answers, correct_answers)
     total_questions = len(questions)
@@ -163,7 +164,7 @@ def show_test_results(num_correct, total_questions):
     mark_percentage = (num_correct / total_questions) * 100
     clear_screen()
     print("\nTest Results:")
-    print(f"You answered {num_correct} out of {total_questions} questions correctly.")
-    print(f"Mark: {round(mark_percentage,2)}%")
+    nprint(f"You answered {num_correct} out of {total_questions} questions correctly.")
+    nprint(f"Mark: {round(mark_percentage,2)}%")
     
     input("\nPress Enter to continue...")

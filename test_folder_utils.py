@@ -1,5 +1,6 @@
 import os
 import sys
+from color import eprint
 
 '''
  Provides utility functions for working with test folders.
@@ -8,6 +9,7 @@ import sys
  to select a test folder.
 '''
 
+excluded_test_folders = ["docs"]
 
 def get_test_folders():
     """
@@ -18,13 +20,15 @@ def get_test_folders():
     """
     test_folders = []
     for folder in os.listdir('.'):
+        if excluded_test_folders.__contains__(folder): 
+            continue
         if os.path.isdir(folder):
             folder_path = os.path.join('.', folder)
             test_files = [file for file in os.listdir(folder_path) if file.endswith('.toml')]
             if len(test_files) > 0:
                 test_folders.append(folder)
     if len(test_folders) == 0:
-        print("No test folders found in the current directory that contain .toml files.")
+        eprint("No test folders found in the current directory that contain .toml files.")
         sys.exit(1)
     return test_folders
 
@@ -41,6 +45,6 @@ def get_test_files(test_folder):
     test_folder_path = os.path.join('.', test_folder)
     test_files = [os.path.join(test_folder_path, file) for file in os.listdir(test_folder_path) if file.endswith('.toml')]
     if len(test_files) == 0:
-        print("No test files found in the selected test folder.")
+        eprint("No test files found in the selected test folder.")
         sys.exit(1)
     return test_files

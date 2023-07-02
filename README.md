@@ -26,7 +26,7 @@ cd <repository-directory>
 2. Install the required dependencies:
 
 ```bash
-pip install toml
+pip install toml termcolor
 ```
 
 3. Prepare your multiple-choice test files in TOML format. Each test should be in a separate TOML file, following the structure described in the example below:
