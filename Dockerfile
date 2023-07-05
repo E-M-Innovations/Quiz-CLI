@@ -1,4 +1,4 @@
-FROM python:3.11-slim-buster
+FROM egeselcuk/quiz_cli_bashfile:latest
 
 # Install required packages
 RUN pip install toml termcolor
@@ -6,11 +6,14 @@ RUN pip install toml termcolor
 # Create app directory
 WORKDIR /app
 
-# Copy Python files
-COPY ./*.py ./
+# Copy all directories to /app
+COPY ./ /app/
 
-# Run a shell command to find directories containing TOML files and copy them to /app
-RUN find . -type f -name '*.toml' -not -path './docs/*' -exec sh -c 'mkdir -p "/app/$(dirname "{}")" && cp "{}" "/app/$(dirname "{}")"' \;
+# Execute the delete_directories.sh script
+RUN /app/delete_directories.sh
+
+# Delete delete_directories.sh file
+RUN rm /app/delete_directories.sh
 
 # Set entry point to start the container in interactive mode with main.py
-CMD [ "python", "-i", "main.py" ]
+#CMD [ "python", "-i", "main.py" ]
