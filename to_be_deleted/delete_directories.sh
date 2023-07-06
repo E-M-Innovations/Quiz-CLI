@@ -10,7 +10,7 @@ directory_contains_toml() {
 
 # Loop through directories and delete those without .toml files or named "docs"
 for dir in */; do
-    if [[ "$dir" == "docs/" ]] && ! directory_contains_toml "$dir"; then
+    if [[ "$dir" == "docs/" ]] || ! directory_contains_toml "$dir"; then
         echo "Deleting directory: $dir"
         rm -rf "$dir"
     fi
